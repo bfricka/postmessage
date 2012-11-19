@@ -3,7 +3,7 @@
 
   (function() {
     var PostMsg;
-    if (!window.postMessage) {
+    if (!!!window.postMessage) {
       return;
     }
     PostMsg = (function() {
@@ -14,12 +14,12 @@
           interval = 5000;
         }
         m = this;
+        m.interval = interval;
         m.domain = domain;
         m.child = child;
-        m.interval = interval;
-        m.fns = [];
-        m.data = {};
         m.dataQ = [];
+        m.data = {};
+        m.fns = [];
         m.receive();
         m.init();
         return;
@@ -73,6 +73,12 @@
           fn.send = m.send;
           m.fns.push(fn);
         }
+      };
+
+      PostMsg.prototype.unbind = function(id) {
+        var fn, m;
+        m = this;
+        return fn = m.find(m.fns, id);
       };
 
       /*

@@ -1,14 +1,28 @@
 do ->
-  return unless !!window.postMessage
+  return if not !!window.postMessage
+  # PostMsg = (domain, child, interval = 5000) ->
+  #   m = @
+  #   m.interval = interval
+  #   m.domain = domain
+  #   m.child = child
+  #   m.dataQ = []
+  #   m.data = {}
+  #   m.fns = []
+  #   m.receive()
+  #   m.init()
+  #   return
+
+  # functions = (object) ->
+
   class PostMsg
     constructor: (domain, child, interval = 5000) ->
       m = @
+      m.interval = interval
       m.domain = domain
       m.child = child
-      m.interval = interval
-      m.fns = []
-      m.data = {}
       m.dataQ = []
+      m.data = {}
+      m.fns = []
       m.receive()
       m.init()
       return
@@ -58,6 +72,10 @@ do ->
         fn.send = m.send
         m.fns.push(fn)
       return
+
+    unbind: (id) ->
+      m = @
+      fn = m.find(m.fns, id)
 
     ###
     Send a post message response

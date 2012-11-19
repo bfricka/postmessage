@@ -280,15 +280,15 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/less\/style.less" : {
+    "\/less\/bootstrap\/grid.less" : {
       "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
+      "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/less\/style.less",
+      "inputAbbreviatedPath" : "\/less\/bootstrap\/grid.less",
       "outputStyle" : 1,
       "shouldRunBless" : 1,
-      "outputAbbreviatedPath" : "\/css\/style.css",
+      "outputAbbreviatedPath" : "\/less\/css\/grid.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -317,6 +317,19 @@
       "initialSize" : 8777,
       "fileType" : 8192
     },
+    "\/less\/style.less" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/less\/style.less",
+      "outputStyle" : 1,
+      "shouldRunBless" : 1,
+      "outputAbbreviatedPath" : "\/css\/style.css",
+      "strictImports" : 0,
+      "fileType" : 1,
+      "debugStyle" : 0
+    },
     "\/less\/bootstrap\/type.less" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
@@ -326,19 +339,6 @@
       "outputStyle" : 1,
       "shouldRunBless" : 1,
       "outputAbbreviatedPath" : "\/less\/css\/type.css",
-      "strictImports" : 0,
-      "fileType" : 1,
-      "debugStyle" : 0
-    },
-    "\/less\/bootstrap\/grid.less" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 1,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/less\/bootstrap\/grid.less",
-      "outputStyle" : 1,
-      "shouldRunBless" : 1,
-      "outputAbbreviatedPath" : "\/less\/css\/grid.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -370,8 +370,8 @@
       "debugStyle" : 0
     },
     "\/server.js" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
       "inputAbbreviatedPath" : "\/server.js",
@@ -380,16 +380,18 @@
       "outputAbbreviatedPath" : "\/server-min.js",
       "fileType" : 64
     },
-    "\/js\/libs\/lodash.min.js" : {
-      "ignoreWasSetByUser" : 1,
+    "\/less\/bootstrap\/navbar.less" : {
+      "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/js\/libs\/lodash.min.js",
+      "inputAbbreviatedPath" : "\/less\/bootstrap\/navbar.less",
       "outputStyle" : 1,
-      "syntaxCheckerStyle" : 1,
-      "outputAbbreviatedPath" : "\/js\/libs\/lodash.min-min.js",
-      "fileType" : 64
+      "shouldRunBless" : 1,
+      "outputAbbreviatedPath" : "\/less\/css\/navbar.css",
+      "strictImports" : 0,
+      "fileType" : 1,
+      "debugStyle" : 0
     },
     "\/less\/bootstrap\/responsive-1200px-min.less" : {
       "ignoreWasSetByUser" : 0,
@@ -404,15 +406,26 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/less\/bootstrap\/navbar.less" : {
+    "\/js\/libs\/lodash.min.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/js\/libs\/lodash.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 1,
+      "outputAbbreviatedPath" : "\/js\/libs\/lodash.min-min.js",
+      "fileType" : 64
+    },
+    "\/less\/bootstrap\/breadcrumbs.less" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/less\/bootstrap\/navbar.less",
+      "inputAbbreviatedPath" : "\/less\/bootstrap\/breadcrumbs.less",
       "outputStyle" : 1,
       "shouldRunBless" : 1,
-      "outputAbbreviatedPath" : "\/less\/css\/navbar.css",
+      "outputAbbreviatedPath" : "\/less\/css\/breadcrumbs.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -430,19 +443,6 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/less\/bootstrap\/popovers.less" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 1,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/less\/bootstrap\/popovers.less",
-      "outputStyle" : 1,
-      "shouldRunBless" : 1,
-      "outputAbbreviatedPath" : "\/less\/css\/popovers.css",
-      "strictImports" : 0,
-      "fileType" : 1,
-      "debugStyle" : 0
-    },
     "\/less\/bootstrap\/wells.less" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
@@ -456,15 +456,15 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/less\/bootstrap\/breadcrumbs.less" : {
+    "\/less\/bootstrap\/popovers.less" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/less\/bootstrap\/breadcrumbs.less",
+      "inputAbbreviatedPath" : "\/less\/bootstrap\/popovers.less",
       "outputStyle" : 1,
       "shouldRunBless" : 1,
-      "outputAbbreviatedPath" : "\/less\/css\/breadcrumbs.css",
+      "outputAbbreviatedPath" : "\/less\/css\/popovers.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -491,6 +491,18 @@
       "syntaxCheckerStyle" : 1,
       "outputAbbreviatedPath" : "\/js\/libs\/jquery-min.js",
       "fileType" : 64
+    },
+    "\/coffee\/child.coffee" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/coffee\/child.coffee",
+      "checkOutputStyle" : 1,
+      "minifyOutput" : 0,
+      "outputAbbreviatedPath" : "\/coffee\/child.js",
+      "outputStyle" : 0,
+      "fileType" : 32
     },
     "\/js\/libs\/jquery.min.js" : {
       "ignoreWasSetByUser" : 1,
@@ -653,15 +665,15 @@
       "fileType" : 1,
       "debugStyle" : 0
     },
-    "\/less\/bootstrap\/utilities.less" : {
+    "\/less\/bootstrap\/media.less" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/less\/bootstrap\/utilities.less",
+      "inputAbbreviatedPath" : "\/less\/bootstrap\/media.less",
       "outputStyle" : 1,
       "shouldRunBless" : 1,
-      "outputAbbreviatedPath" : "\/less\/css\/utilities.css",
+      "outputAbbreviatedPath" : "\/less\/css\/media.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
@@ -686,18 +698,30 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/less\/bootstrap\/media.less" : {
+    "\/less\/bootstrap\/utilities.less" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/less\/bootstrap\/media.less",
+      "inputAbbreviatedPath" : "\/less\/bootstrap\/utilities.less",
       "outputStyle" : 1,
       "shouldRunBless" : 1,
-      "outputAbbreviatedPath" : "\/less\/css\/media.css",
+      "outputAbbreviatedPath" : "\/less\/css\/utilities.css",
       "strictImports" : 0,
       "fileType" : 1,
       "debugStyle" : 0
+    },
+    "\/coffee\/parent.coffee" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/coffee\/parent.coffee",
+      "checkOutputStyle" : 1,
+      "minifyOutput" : 0,
+      "outputAbbreviatedPath" : "\/coffee\/parent.js",
+      "outputStyle" : 0,
+      "fileType" : 32
     }
   },
   "manualImportLinks" : [
@@ -800,7 +824,7 @@
       "prototypejs" : 0,
       "noarg" : 1,
       "supernew" : 0,
-      "node" : 0,
+      "node" : 1,
       "unused" : 0,
       "debug" : 0,
       "bitwise" : 1,
@@ -862,7 +886,7 @@
       "no-seqs" : 1,
       "beautify" : 0,
       "lift-vars" : 1,
-      "consolidate-primitive-values" : 0,
+      "consolidate-primitive-values" : 1,
       "no-squeeze" : 0
     },
     "sassAutoOutputPathReplace2" : "css",

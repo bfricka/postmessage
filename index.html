@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html ng-app="myApp" ng-controller="MainAppCtrl" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html ng-app="myApp" ng-controller="MainAppCtrl" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html ng-app="myApp" ng-controller="MainAppCtrl" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html ng-app="myApp" ng-controller="MainAppCtrl" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -20,13 +20,6 @@
     <!-- Dev -->    <script src="js/libs/lodash.js"></script>
     <!-- Prod -->   <!--<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.9.1/lodash.min.js"></script>-->
     <!-- Backup --> <script>window._ || document.write('<script src="js/libs/lodash.min.js"<\/script>')</script>
-
-    <!-- Dev --> <script src="js/libs/amplify.store.js"></script>
-    <!-- Prod --> <!-- <script type="text/javascript" src="js/libs/amplify.store.min.js"></script> -->
-
-    <!-- Dev -->    <script src="js/libs/angular.js"></script>
-    <!-- Prod -->   <!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>-->
-    <!-- Backup --> <script>window.angular || document.write('<script src="js/libs/angular.min.js"<\/script>')</script>
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -41,14 +34,7 @@
         <iframe class="span12" src="index2.html" frameborder="0"></iframe>
       </div>
     </div> <!-- /container -->
-    <script src="js/app.js"></script>
     <script src="js/postMessage.js"></script>
-    <script>
-      pm = new PostMsg('http://bdev:8002')
-      pm.bind(function(){
-        console.log("Parent: ");
-        console.log(this);
-      });
-    </script>
+    <script src="js/parent.js"></script>
   </body>
 </html>

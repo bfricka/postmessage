@@ -96,14 +96,7 @@
       </footer>
 
     </div> <!-- /container -->
-    <script src="js/app.js"></script>
     <script src="js/postMessage.js"></script>
-    <script>
-      pm = new PostMsg('http://bdev:8002')
-      pm.bind(function(){
-        console.log("Child: ");
-        console.log(this);
-      });
-    </script>
+    <script src="js/child.js"></script>
   </body>
 </html>
