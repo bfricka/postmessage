@@ -1,4 +1,9 @@
-pm = new window.PostMsg('http://bdev:8002')
+pm = new window.PostMsg('http://bdev:8002', true)
+pm.on 'receive', (e, data) ->
+  console.log("Data FROM parent TO child:")
+  console.log(data)
 pm.bind ->
-  # console.log("Child: ")
-  # console.log(this)
+  obj =
+    greeting: 'hello'
+    recipient: 'world'
+  this.send(JSON.stringify(obj))

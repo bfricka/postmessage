@@ -4,6 +4,15 @@
 
   pm = new window.PostMsg('http://bdev:8002');
 
+  pm.on('receive', function(e, data) {
+    var obj;
+    console.log(data);
+    obj = {
+      hello: 'child'
+    };
+    return data.postmsg.send(data._source, JSON.stringify(obj));
+  });
+
   pm.bind(function() {});
 
 }).call(this);

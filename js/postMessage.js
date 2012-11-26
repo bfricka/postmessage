@@ -2,143 +2,162 @@
 (function() {
 
   (function() {
-    var PostMsg;
+    var PostMsg, m;
     if (!!!window.postMessage) {
       return;
     }
-    PostMsg = (function() {
-
-      function PostMsg(domain, child, interval) {
-        var m;
-        if (interval == null) {
-          interval = 5000;
-        }
-        m = this;
-        m.interval = interval;
-        m.domain = domain;
-        m.child = child;
-        m.dataQ = [];
-        m.data = {};
-        m.fns = [];
-        m.receive();
-        m.init();
-        return;
+    PostMsg = function(domain, child, interval) {
+      var m;
+      if (interval == null) {
+        interval = 5000;
       }
-
-      PostMsg.prototype.init = function() {
-        var m;
-        m = this;
-        setInterval(function() {
-          m.processQ();
-          return m.digest();
-        }, m.interval);
-      };
-
-      PostMsg.prototype.processQ = function() {
-        var fn, i, idx, len, m, obj;
-        m = this;
-        len = m.dataQ.length;
-        i = 0;
-        while (i < len) {
-          obj = m.dataQ[0];
-          fn = m.find(m.fns, obj.id);
-          m.data = $.extend(m.data, obj);
-          if (fn) {
-            idx = m.fns.indexOf(fn);
-            m.fns[idx] = $.extend(m.fns[idx], obj);
-          }
-          m.dataQ.shift();
-          i++;
+      m = this;
+      m.interval = interval;
+      m.domain = domain;
+      m.child = child;
+      m.dataQ = [];
+      m.data = {};
+      m.fns = [];
+      m.receive();
+      m.init();
+    };
+    m = PostMsg;
+    m.functions = function(object) {
+      var k, v;
+      for (k in object) {
+        v = object[k];
+        if (typeof v === 'function') {
+          PostMsg.prototype[k] = v;
         }
-      };
-
-      PostMsg.prototype.digest = function() {
-        var fn, _i, _len, _ref;
-        _ref = this.fns;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          fn = _ref[_i];
-          fn.apply(fn, arguments);
-        }
-      };
-
-      PostMsg.prototype.bind = function(fn) {
-        var copy, m;
-        m = this;
-        if (typeof fn !== 'function') {
-          throw new TypeError("Parameter should be a function.");
-        } else {
-          copy = "send,bind,digest,data";
-          fn.id = m.makeId();
-          fn.data = [];
-          fn.send = m.send;
-          m.fns.push(fn);
-        }
-      };
-
-      PostMsg.prototype.unbind = function(id) {
-        var fn, m;
-        m = this;
-        return fn = m.find(m.fns, id);
-      };
-
-      /*
-          Send a post message response
-          @param {window} Window source to send post message to
-          @param {data} Stringified object to send
-          @return {void}
-      */
-
-
-      PostMsg.prototype.send = function(tgt, data) {
-        if ((tgt != null) && typeof data === 'string') {
-          tgt.postmessage(data, this.domain);
-        }
-      };
-
-      PostMsg.prototype.receive = function() {
-        var m;
-        m = this;
-        $(window).on('message', function(e) {
-          var data, evt;
-          evt = e.originalEvent;
-          if (evt.origin !== m.domain) {
-            return;
-          }
-          data = JSON.parse(evt.data);
-          data._source = evt.source;
-          data._event = e;
-          return m.dataQ.push(data);
-        });
-      };
-
-      PostMsg.prototype.makeId = function() {
-        var chars, i, id, len, rNum;
-        id = "_data-";
-        chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-";
-        len = 20;
-        i = 0;
-        while (i < len) {
-          rNum = Math.floor(Math.random() * chars.length);
-          id += chars.substring(rNum, rNum + 1);
-          i++;
-        }
-        return id;
-      };
-
-      PostMsg.prototype.find = function(arr, id) {
-        var item, _i, _len;
-        for (_i = 0, _len = arr.length; _i < _len; _i++) {
-          item = arr[_i];
-          if (item.id === id) {
-            return item;
-          }
-        }
+      }
+    };
+    m.on = function(evt, callback) {
+      if (typeof evt === 'string' && typeof callback === 'function') {
+        return $(window).on("PostMsg/" + evt, callback);
+      } else {
         return false;
-      };
+      }
+    };
+    m.init = function() {
+      m = this;
+      setInterval(function() {
+        m.processQ();
+        return m.digest();
+      }, m.interval);
+    };
+    m.processQ = function() {
+      var fn, i, idx, len, obj;
+      m = this;
+      len = m.dataQ.length;
+      i = 0;
+      while (i < len) {
+        obj = m.dataQ[0];
+        fn = m.find(m.fns, obj.id);
+        m.data = $.extend(m.data, obj);
+        if (fn) {
+          idx = m.fns.indexOf(fn);
+          m.fns[idx] = $.extend(m.fns[idx], obj);
+        }
+        m.dataQ.shift();
+        i++;
+      }
+    };
+    m.digest = function() {
+      var fn, _i, _len, _ref;
+      _ref = this.fns;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        fn = _ref[_i];
+        fn.apply(this, arguments);
+      }
+    };
+    m.bind = function(fn) {
+      m = this;
+      if (typeof fn !== 'function') {
+        throw new TypeError("Parameter should be a function.");
+      } else {
+        $.extend(fn, m);
+        fn.PostMsg = m;
+        fn.id = m.makeId();
+        fn.data = [];
+        m.fns.push(fn);
+      }
+    };
+    m.unbind = function(id) {
+      var i, len;
+      m = this;
+      len = m.fns.length;
+      i = 0;
+      while (i < len) {
+        if (m.fns[i].id === id) {
+          return m.fns.splice(i, 1);
+        }
+        i++;
+      }
+    };
+    /*
+      Send a post message response
+      @param {window} Window source to send post message to
+      @param {data} Stringified object to send
+      @return {void}
+    */
 
-      return PostMsg;
-
-    })();
+    m.send = function(tgt, data) {
+      var obj;
+      m = this;
+      if (m.child) {
+        data = tgt;
+        tgt = window.parent;
+      }
+      if ((tgt != null) && typeof data === 'string') {
+        tgt.postMessage(data, m.domain);
+        obj = {
+          postmsg: m,
+          data: data,
+          tgt: tgt
+        };
+        $(window).trigger("PostMsg/send", obj);
+      }
+    };
+    m.receive = function() {
+      m = this;
+      $(window).on('message', function(e) {
+        var data, evt;
+        evt = e.originalEvent;
+        if (evt.origin !== m.domain) {
+          return;
+        }
+        data = JSON.parse(evt.data);
+        data.postmsg = m;
+        data._source = evt.source;
+        data._event = e;
+        $(window).trigger("PostMsg/receive", data);
+        return m.dataQ.push(data);
+      });
+    };
+    m.makeId = function() {
+      var chars, i, id, len, rNum;
+      id = "_data-";
+      chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz-";
+      len = 20;
+      i = 0;
+      while (i < len) {
+        rNum = Math.floor(Math.random() * chars.length);
+        id += chars.substring(rNum, rNum + 1);
+        i++;
+      }
+      return id;
+    };
+    m.find = function(arr, id) {
+      var item, _i, _len;
+      for (_i = 0, _len = arr.length; _i < _len; _i++) {
+        item = arr[_i];
+        if (item.id === id) {
+          return item;
+        }
+      }
+      return false;
+    };
+    m.functions(PostMsg);
     return window.PostMsg = PostMsg;
   })();
 

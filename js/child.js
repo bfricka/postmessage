@@ -2,8 +2,20 @@
 (function() {
   var pm;
 
-  pm = new window.PostMsg('http://bdev:8002');
+  pm = new window.PostMsg('http://bdev:8002', true);
 
-  pm.bind(function() {});
+  pm.on('receive', function(e, data) {
+    console.log("Data FROM parent TO child:");
+    return console.log(data);
+  });
+
+  pm.bind(function() {
+    var obj;
+    obj = {
+      greeting: 'hello',
+      recipient: 'world'
+    };
+    return this.send(JSON.stringify(obj));
+  });
 
 }).call(this);
