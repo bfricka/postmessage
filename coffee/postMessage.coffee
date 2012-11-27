@@ -29,7 +29,17 @@ do ->
       (m.callbacks[event] = m.callbacks[event] or []).push fn
       m
 
+    ###
+    Deregister event handler
+    @param {String} event - event name
+    @param {String} id - The ID to search for. If undefined, will empty all
+    callbacks associated with the event name
+    ###
     off: (event, id) ->
+      id = id or this.id
+      unless id
+        return @callbacks[event] = []
+
       callbacks = @callbacks[event]
       if callbacks
         len = callbacks.length
@@ -41,6 +51,12 @@ do ->
 
       @
 
+    ###
+    Bind an event to fire once.
+    @param {String} event name
+    @param {Function} Callback to execute when binding fires
+    @return {Class} Instance
+    ###
     once: (event, fn) ->
       fn.once = true
       callback = @on(event, fn)
@@ -63,7 +79,7 @@ do ->
           cb = callbacks[i]
           evtArgs = [cb.id]
           cb.apply cb, args.concat(evtArgs)
-          if cb.once
+          if cb.once is true
             callbacks.splice(i, 1)
             i--
             len--
@@ -77,6 +93,10 @@ do ->
       , m.interval
       return
 
+    ###
+    Internal digest method.
+    Runs through all bound fns and processes the send queue
+    ###
     digest: ->
       m = @
       # Run all fns
@@ -95,6 +115,10 @@ do ->
 
       return
 
+    ###
+    Bind a function to the interval loop
+    @fn {Function} Requires a callback function
+    ###
     bind: (fn) ->
       m = @
       if typeof fn isnt 'function'
@@ -108,8 +132,17 @@ do ->
         m.fns.push(fn)
       return
 
+    ###
+    Unbind a function by ID
+    @param {String} id - The function ID. Can be undefined if called from
+    within the function that is to be unbound. (e.g. - within a bind callback)
+    @return {void}
+    ###
     unbind: (id) ->
       m = @
+      id = id or m.id
+      return unless id
+
       len = m.fns.length
       i = 0
       while i < len
@@ -120,8 +153,8 @@ do ->
 
     ###
     Send a post message response
-    @param {window} Window source to send post message to
-    @param {data} Stringified object to send
+    @param {Window} Window source to send post message to
+    @param {String} Stringified object to send
     @return {void}
     ###
     __send: (tgt, data) ->
@@ -135,29 +168,26 @@ do ->
         m.emit "send", obj
       return
 
-    normalizeData: (data) ->
-      try
-        obj = !!JSON.parse(data)
-      catch e
-        data = JSON.stringify(data) if $.type(data) is 'object'
-      finally
-        data = if obj then data else data.toString()
-
-      data
-
-    send: (tgt, data, fire) ->
+    ###
+    Public send method
+    @param {Window} tgt - Target window to send to
+    @param {String, Object} data - String or object to send
+    @return {void}
+    ###
+    send: (tgt, data) ->
       m = @
       if m.child
         data = tgt
         tgt = window.parent
 
-      data = m.normalizeData(data)
-
-      if fire then m.__send(tgt, data)
+      data = if $.type(data) is 'object' then JSON.stringify(data) else data
 
       m.sendQ.push [tgt, data]
       return
 
+    ###
+    Internal `receive` method. Simply registers receive event.
+    ###
     receive: ->
       m = @
       $(window).on 'message', (e) ->
@@ -168,6 +198,7 @@ do ->
         data._source = evt.source
         data._event = e
         m.emit "receive", data
+        return
 
       return
 

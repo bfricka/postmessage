@@ -41,8 +41,20 @@
       return m;
     };
 
+    /*
+        Deregister event handler
+        @param {String} event - event name
+        @param {String} id - The ID to search for. If undefined, will empty all
+        callbacks associated with the event name
+    */
+
+
     PostMsg.prototype.off = function(event, id) {
       var callbacks, i, len;
+      id = id || this.id;
+      if (!id) {
+        return this.callbacks[event] = [];
+      }
       callbacks = this.callbacks[event];
       if (callbacks) {
         len = callbacks.length;
@@ -56,6 +68,14 @@
       }
       return this;
     };
+
+    /*
+        Bind an event to fire once.
+        @param {String} event name
+        @param {Function} Callback to execute when binding fires
+        @return {Class} Instance
+    */
+
 
     PostMsg.prototype.once = function(event, fn) {
       var callback;
@@ -83,7 +103,7 @@
           cb = callbacks[i];
           evtArgs = [cb.id];
           cb.apply(cb, args.concat(evtArgs));
-          if (cb.once) {
+          if (cb.once === true) {
             callbacks.splice(i, 1);
             i--;
             len--;
@@ -101,6 +121,12 @@
         return m.digest();
       }, m.interval);
     };
+
+    /*
+        Internal digest method.
+        Runs through all bound fns and processes the send queue
+    */
+
 
     PostMsg.prototype.digest = function() {
       var args, fn, i, len, m, _i, _len, _ref;
@@ -120,6 +146,12 @@
       }
     };
 
+    /*
+        Bind a function to the interval loop
+        @fn {Function} Requires a callback function
+    */
+
+
     PostMsg.prototype.bind = function(fn) {
       var m;
       m = this;
@@ -135,9 +167,21 @@
       }
     };
 
+    /*
+        Unbind a function by ID
+        @param {String} id - The function ID. Can be undefined if called from
+        within the function that is to be unbound. (e.g. - within a bind callback)
+        @return {void}
+    */
+
+
     PostMsg.prototype.unbind = function(id) {
       var i, len, m;
       m = this;
+      id = id || m.id;
+      if (!id) {
+        return;
+      }
       len = m.fns.length;
       i = 0;
       while (i < len) {
@@ -150,8 +194,8 @@
 
     /*
         Send a post message response
-        @param {window} Window source to send post message to
-        @param {data} Stringified object to send
+        @param {Window} Window source to send post message to
+        @param {String} Stringified object to send
         @return {void}
     */
 
@@ -170,33 +214,29 @@
       }
     };
 
-    PostMsg.prototype.normalizeData = function(data) {
-      var obj;
-      try {
-        obj = !!JSON.parse(data);
-      } catch (e) {
-        if ($.type(data) === 'object') {
-          data = JSON.stringify(data);
-        }
-      } finally {
-        data = obj ? data : data.toString();
-      }
-      return data;
-    };
+    /*
+        Public send method
+        @param {Window} tgt - Target window to send to
+        @param {String, Object} data - String or object to send
+        @return {void}
+    */
 
-    PostMsg.prototype.send = function(tgt, data, fire) {
+
+    PostMsg.prototype.send = function(tgt, data) {
       var m;
       m = this;
       if (m.child) {
         data = tgt;
         tgt = window.parent;
       }
-      data = m.normalizeData(data);
-      if (fire) {
-        m.__send(tgt, data);
-      }
+      data = $.type(data) === 'object' ? JSON.stringify(data) : data;
       m.sendQ.push([tgt, data]);
     };
+
+    /*
+        Internal `receive` method. Simply registers receive event.
+    */
+
 
     PostMsg.prototype.receive = function() {
       var m;
@@ -211,7 +251,7 @@
         data.postmsg = m;
         data._source = evt.source;
         data._event = e;
-        return m.emit("receive", data);
+        m.emit("receive", data);
       });
     };
 
