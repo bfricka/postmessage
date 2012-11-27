@@ -9,27 +9,29 @@ child =
     p.send()
     return
 
+  oHeight: ->
+    document.body.offsetHeight
+
   calcModal: (data) ->
     p = @
     ht = p.modal.height()
     fullHt = p.modal.outerHeight()
-    if (data.top + data.scrollTop) > document.body.offsetHeight
-      top = 'auto'
-      bottom = 10
+    if (data.top + data.scrollTop + 10) > p.oHeight()
+      top = p.oHeight() - fullHt - 10
       marginTop = 0
-      method = 'css'
     else if (data.top * 2) - fullHt < (data.offsetTop * 2) and data.scrollTop < data.offsetTop
       top = 10
-      bottom = 'auto'
       marginTop = 0
-      method = 'css'
     else
       top = data.top
-      bottom = 'auto'
       marginTop = data.scrollTop - (fullHt / 2) - data.offsetTop
-      method = 'animate'
 
-    p.modal[method]({ top: top, bottom: bottom, marginTop: marginTop } , { duration: 250, queue: false })
+    p.modal.animate
+      top: top
+      marginTop: marginTop
+    ,
+      duration: 250
+      queue: false
 
     return
 
@@ -43,7 +45,7 @@ child =
   send: ->
     p = @
     p.pm.bind ->
-      ht = document.body.offsetHeight
+      ht = p.oHeight()
       return if ht is p.prevHt
 
       obj = { ht: ht }

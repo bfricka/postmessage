@@ -12,30 +12,26 @@
       p.receive();
       p.send();
     },
+    oHeight: function() {
+      return document.body.offsetHeight;
+    },
     calcModal: function(data) {
-      var bottom, fullHt, ht, marginTop, method, p, top;
+      var fullHt, ht, marginTop, p, top;
       p = this;
       ht = p.modal.height();
       fullHt = p.modal.outerHeight();
-      if ((data.top + data.scrollTop) > document.body.offsetHeight) {
-        top = 'auto';
-        bottom = 10;
+      if ((data.top + data.scrollTop + 10) > p.oHeight()) {
+        top = p.oHeight() - fullHt - 10;
         marginTop = 0;
-        method = 'css';
       } else if ((data.top * 2) - fullHt < (data.offsetTop * 2) && data.scrollTop < data.offsetTop) {
         top = 10;
-        bottom = 'auto';
         marginTop = 0;
-        method = 'css';
       } else {
         top = data.top;
-        bottom = 'auto';
         marginTop = data.scrollTop - (fullHt / 2) - data.offsetTop;
-        method = 'animate';
       }
-      p.modal[method]({
+      p.modal.animate({
         top: top,
-        bottom: bottom,
         marginTop: marginTop
       }, {
         duration: 250,
@@ -54,7 +50,7 @@
       p = this;
       p.pm.bind(function() {
         var ht, obj;
-        ht = document.body.offsetHeight;
+        ht = p.oHeight();
         if (ht === p.prevHt) {
           return;
         }
