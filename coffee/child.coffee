@@ -1,9 +1,9 @@
 child =
-  init: ->
+  init: (domain) ->
     p = @
     p.prevHt = 0
-    p.modal = $('#childModal')
-    p.pm = new window.PostMsg('http://bdev:8002', true, 500)
+    p.modals = []
+    p.pm = new window.PostMsg(domain, true, 500)
 
     p.receive()
     p.send()
@@ -12,12 +12,26 @@ child =
   oHeight: ->
     document.body.offsetHeight
 
-  calcModal: (data) ->
+  setModal: (elem) ->
     p = @
-    ht = p.modal.height()
-    fullHt = p.modal.outerHeight()
-    if (data.top + data.scrollTop + 10) > p.oHeight()
-      top = p.oHeight() - fullHt - 10
+    p.modals.push(elem) if p.modals.indexOf(elem) is -1
+    p.positionModals(p.currentData)
+    return
+
+  positionModals: (data) ->
+    return if not data
+    for modal in @modals
+      @calcModal(modal, data)
+    return
+
+  calcModal: (modal, data) ->
+    p = @
+    ht = modal.height()
+    fullHt = modal.outerHeight()
+    offsetHeight = p.oHeight()
+    documentCheck = if data.docHt - data.scrollTop > offsetHeight then data.offsetTop else 10
+    if (data.top + data.scrollTop + documentCheck) > offsetHeight
+      top = offsetHeight - fullHt - 10
       marginTop = 0
     else if (data.top * 2) - fullHt < (data.offsetTop * 2) and data.scrollTop < data.offsetTop
       top = 10
@@ -26,7 +40,7 @@ child =
       top = data.top
       marginTop = data.scrollTop - (fullHt / 2) - data.offsetTop
 
-    p.modal.animate
+    modal.animate
       top: top
       marginTop: marginTop
     ,
@@ -38,7 +52,8 @@ child =
   receive: ->
     p = @
     p.pm.on 'receive', (data) ->
-      p.calcModal(data)
+      p.currentData = data
+      p.positionModals(data)
       return
     return
 
@@ -54,4 +69,5 @@ child =
       return
     return
 
-child.init()
+child.init('http://bdev:8002')
+child.setModal($('#childModal'))

@@ -19,6 +19,7 @@ parent =
     p = @
     p.modal =
       top: p.win[0].innerHeight / 2
+      docHt: document.body.offsetHeight
       scrollTop: p.win.scrollTop()
       offsetTop: p.ifr.offset().top
     return

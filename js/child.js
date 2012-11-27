@@ -3,25 +3,46 @@
   var child;
 
   child = {
-    init: function() {
+    init: function(domain) {
       var p;
       p = this;
       p.prevHt = 0;
-      p.modal = $('#childModal');
-      p.pm = new window.PostMsg('http://bdev:8002', true, 500);
+      p.modals = [];
+      p.pm = new window.PostMsg(domain, true, 500);
       p.receive();
       p.send();
     },
     oHeight: function() {
       return document.body.offsetHeight;
     },
-    calcModal: function(data) {
-      var fullHt, ht, marginTop, p, top;
+    setModal: function(elem) {
+      var p;
       p = this;
-      ht = p.modal.height();
-      fullHt = p.modal.outerHeight();
-      if ((data.top + data.scrollTop + 10) > p.oHeight()) {
-        top = p.oHeight() - fullHt - 10;
+      if (p.modals.indexOf(elem) === -1) {
+        p.modals.push(elem);
+      }
+      p.positionModals(p.currentData);
+    },
+    positionModals: function(data) {
+      var modal, _i, _len, _ref;
+      if (!data) {
+        return;
+      }
+      _ref = this.modals;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        modal = _ref[_i];
+        this.calcModal(modal, data);
+      }
+    },
+    calcModal: function(modal, data) {
+      var documentCheck, fullHt, ht, marginTop, offsetHeight, p, top;
+      p = this;
+      ht = modal.height();
+      fullHt = modal.outerHeight();
+      offsetHeight = p.oHeight();
+      documentCheck = data.docHt - data.scrollTop > offsetHeight ? data.offsetTop : 10;
+      if ((data.top + data.scrollTop + documentCheck) > offsetHeight) {
+        top = offsetHeight - fullHt - 10;
         marginTop = 0;
       } else if ((data.top * 2) - fullHt < (data.offsetTop * 2) && data.scrollTop < data.offsetTop) {
         top = 10;
@@ -30,7 +51,7 @@
         top = data.top;
         marginTop = data.scrollTop - (fullHt / 2) - data.offsetTop;
       }
-      p.modal.animate({
+      modal.animate({
         top: top,
         marginTop: marginTop
       }, {
@@ -42,7 +63,8 @@
       var p;
       p = this;
       p.pm.on('receive', function(data) {
-        p.calcModal(data);
+        p.currentData = data;
+        p.positionModals(data);
       });
     },
     send: function() {
@@ -63,6 +85,8 @@
     }
   };
 
-  child.init();
+  child.init('http://bdev:8002');
+
+  child.setModal($('#childModal'));
 
 }).call(this);
