@@ -42,7 +42,7 @@
     scroll: function() {
       var p;
       p = this;
-      p.win.on('scroll', function() {
+      p.win.on('scroll resize', function() {
         p.calcModal();
       });
     },

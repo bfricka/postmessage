@@ -12,12 +12,24 @@ child =
   calcModal: (data) ->
     p = @
     ht = p.modal.height()
-    top = if (data.top + data.scrollTop + (ht/2)) > document.body.offsetHeight then 'auto' else data.top
-    bottom = if top isnt 'auto' then 'auto' else 10
-    marginTop = if top isnt 'auto' then data.scrollTop - (ht / 2) - data.offsetTop else 0
-    method = if bottom is 'auto' then 'animate' else 'css'
+    fullHt = p.modal.outerHeight()
+    if (data.top + data.scrollTop) > document.body.offsetHeight
+      top = 'auto'
+      bottom = 10
+      marginTop = 0
+      method = 'css'
+    else if (data.top * 2) - fullHt < (data.offsetTop * 2) and data.scrollTop < data.offsetTop
+      top = 10
+      bottom = 'auto'
+      marginTop = 0
+      method = 'css'
+    else
+      top = data.top
+      bottom = 'auto'
+      marginTop = data.scrollTop - (fullHt / 2) - data.offsetTop
+      method = 'animate'
 
-    p.modal[method]({ top: top, bottom: bottom, marginTop: marginTop } , 150)
+    p.modal[method]({ top: top, bottom: bottom, marginTop: marginTop } , { duration: 250, queue: false })
 
     return
 

@@ -32,7 +32,7 @@ parent =
 
   scroll: ->
     p = @
-    p.win.on 'scroll', ->
+    p.win.on 'scroll resize', ->
       p.calcModal()
       return
     return

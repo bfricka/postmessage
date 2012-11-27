@@ -13,18 +13,34 @@
       p.send();
     },
     calcModal: function(data) {
-      var bottom, ht, marginTop, method, p, top;
+      var bottom, fullHt, ht, marginTop, method, p, top;
       p = this;
       ht = p.modal.height();
-      top = (data.top + data.scrollTop + (ht / 2)) > document.body.offsetHeight ? 'auto' : data.top;
-      bottom = top !== 'auto' ? 'auto' : 10;
-      marginTop = top !== 'auto' ? data.scrollTop - (ht / 2) - data.offsetTop : 0;
-      method = bottom === 'auto' ? 'animate' : 'css';
+      fullHt = p.modal.outerHeight();
+      if ((data.top + data.scrollTop) > document.body.offsetHeight) {
+        top = 'auto';
+        bottom = 10;
+        marginTop = 0;
+        method = 'css';
+      } else if ((data.top * 2) - fullHt < (data.offsetTop * 2) && data.scrollTop < data.offsetTop) {
+        top = 10;
+        bottom = 'auto';
+        marginTop = 0;
+        method = 'css';
+      } else {
+        top = data.top;
+        bottom = 'auto';
+        marginTop = data.scrollTop - (fullHt / 2) - data.offsetTop;
+        method = 'animate';
+      }
       p.modal[method]({
         top: top,
         bottom: bottom,
         marginTop: marginTop
-      }, 150);
+      }, {
+        duration: 250,
+        queue: false
+      });
     },
     receive: function() {
       var p;
