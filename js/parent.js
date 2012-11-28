@@ -3,7 +3,7 @@
   var parent;
 
   parent = {
-    init: function() {
+    init: function(domain) {
       var p;
       if (!!!window.postMessage) {
         return;
@@ -14,10 +14,11 @@
         top: 0,
         scrollTop: 0
       };
+      p.duration = 250;
       p.ifr = $('#manageIframe');
       p.ifr[0].scrolling = 'no';
       p.win = $(window);
-      p.pm = new window.PostMsg('http://bdev:8002', false, 500);
+      p.pm = new window.PostMsg(domain, false, 500);
       p.calcModal();
       p.receive();
       p.scroll();
@@ -29,7 +30,7 @@
       p.modal = {
         top: p.win[0].innerHeight / 2,
         docHt: document.body.offsetHeight,
-        scrollTop: p.win.scrollTop(),
+        scrollTop: $(document.body).scrollTop(),
         offsetTop: p.ifr.offset().top
       };
     },
@@ -37,7 +38,12 @@
       var p;
       p = this;
       p.pm.on('receive', function(data) {
-        p.ifr.height(data.ht);
+        p.ifr.animate({
+          height: data.ht
+        }, {
+          duration: p.duration,
+          queue: false
+        });
       });
     },
     scroll: function() {
@@ -61,6 +67,6 @@
     }
   };
 
-  parent.init();
+  parent.init('http://bdev:8002');
 
 }).call(this);

@@ -1,5 +1,9 @@
 PostMessge:
 
   ☐ Remove dependency of jQuery and use custom extend, events, etc.
+  ☐ Build in csstransitions/transforms for positioning
   ✔ Create a send queue and delegate all send methods to __.send @done (12-11-26 11:56)
   ✔ Remove dataQ. @done (12-11-26 10:57)
+  ☐ Create timeout for scroll/resize event
+  ☐ Reposition only if visible
+  ☐ Fire repositioning on click so that newly visible items are repositioned

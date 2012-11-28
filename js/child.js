@@ -3,14 +3,33 @@
   var child;
 
   child = {
-    init: function(domain) {
+    init: function(domain, isChild, updateFrequency) {
       var p;
       p = this;
       p.prevHt = 0;
       p.modals = [];
       p.pm = new window.PostMsg(domain, true, 500);
+      p.css3 = Modernizr.csstransitions && Modernizr.csstransforms ? true : false;
+      if (p.css3) {
+        p.transform = p.getCssProps('transform');
+        p.transition = p.getCssProps('transition');
+      }
       p.receive();
       p.send();
+    },
+    getCssProps: function(prop) {
+      var i, len, p, prefixes;
+      prefixes = ['', 'Webkit', 'ms', 'Moz', 'O'];
+      len = prefixes.length;
+      i = 0;
+      while (i < len) {
+        p = i === 0 ? prop : prefixes[i] + prop.charAt(0).toUpperCase() + prop.slice(1);
+        if (p in document.body.style) {
+          return p;
+        }
+        i++;
+      }
+      return prop;
     },
     oHeight: function() {
       return document.body.offsetHeight;
@@ -35,7 +54,7 @@
       }
     },
     calcModal: function(modal, data) {
-      var documentCheck, fullHt, ht, marginTop, offsetHeight, p, top;
+      var documentCheck, fullHt, ht, offsetHeight, p, style, top;
       p = this;
       ht = modal.height();
       fullHt = modal.outerHeight();
@@ -43,21 +62,25 @@
       documentCheck = data.docHt - data.scrollTop > offsetHeight ? data.offsetTop : 10;
       if ((data.top + data.scrollTop + documentCheck) > offsetHeight) {
         top = offsetHeight - fullHt - 10;
-        marginTop = 0;
       } else if ((data.top * 2) - fullHt < (data.offsetTop * 2) && data.scrollTop < data.offsetTop) {
         top = 10;
-        marginTop = 0;
       } else {
-        top = data.top;
-        marginTop = data.scrollTop - (fullHt / 2) - data.offsetTop;
+        top = data.top + data.scrollTop - (fullHt / 2) - data.offsetTop;
       }
-      modal.animate({
-        top: top,
-        marginTop: marginTop
-      }, {
-        duration: 250,
-        queue: false
-      });
+      top = Math.round(top);
+      if (p.css3) {
+        style = modal[0].style;
+        style[p.transition] = "all 400ms cubic-bezier(0.420, 0.000, 0.580, 1.000)";
+        style.top = 0;
+        style[p.transform] = Modernizr.csstransforms3d ? "translate3d(0, " + top + "px, 0)" : "translate(0, " + top + "px)";
+      } else {
+        modal.animate({
+          top: top
+        }, {
+          duration: 250,
+          queue: false
+        });
+      }
     },
     receive: function() {
       var p;
